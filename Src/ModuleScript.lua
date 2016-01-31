@@ -1,9 +1,9 @@
 local m = {}
 
 
-	function m.gen(model, freq, pow, xres, zres, seed)
-		for x = 1, xres do
-	    	for z = 1, zres do
+	function m.gen(model, freq, pow, xres, zres, seed, gridSize)
+		for x = 1, xres, model.PrimaryPart.Size.X do
+	    	for z = 1, zres, model.PrimaryPart.Size.Z do
 	       		local y1 = math.noise(
 	           (x*freq)/xres,
 	           (z*freq)/zres,
@@ -26,9 +26,8 @@ local m = {}
 		end
 	end
 	
-	
-	
-	function m.clean()
+
+	function m.bindTerr()
 		for _, v in pairs(game.Workspace:GetChildren()) do
 			if v.Name == "Cell" and v:IsA("Model") or v.Name == "guide" and v:IsA("Part") then
 				if game.Workspace:FindFirstChild("PixelTerrain") == nil then
@@ -40,5 +39,18 @@ local m = {}
 		end
 		game.Workspace:FindFirstChild("PixelTerrain").PrimaryPart = game.Workspace:FindFirstChild("PixelTerrain").guide
 	end
-
+	
+	
+	function m.makeCollide()
+		for _, v in pairs(game.Workspace.PixelTerrain:GetChildren()) do
+			if v:IsA("Model") then
+				for _, k in pairs(v:GetChildren()) do
+					if k:IsA("Part") then
+						k.CanCollide = true
+					end
+				end
+			end
+		end
+	end
+	
 return m
